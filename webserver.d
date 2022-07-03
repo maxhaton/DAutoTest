@@ -291,7 +291,7 @@ void showResult(string testDir)
 
 	auto result = tryReadText(testDir ~ "result.txt").splitLines();
 	auto info = tryReadText(testDir ~ "info.txt").splitLines();
-
+	auto failureHighlightsRaw = tryReadText(failureHighlightsFile(testDir));
 	auto base = testDir.split("/")[1];
 	auto hash = testDir.split("/")[2];
 
@@ -323,6 +323,15 @@ void showResult(string testDir)
 			`<a href="file/web/"`, tentative, `>All files</a>` ~
 		`</td></tr>`
 	);
+	if (!success)
+	{
+		// If it failed and it looks like theres something to report
+		if (failureHighlightsRaw && failureHighlightsRaw.length > 0)
+		{
+			html.put(`<tr><td>Tests that failed</td><td><pre>`, failureHighlightsRaw,
+						`</pre></td></tr>`);
+		}
+	}
 	if (success && exists(testDir ~ "numstat.txt"))
 	{
 		auto lines = readText(testDir ~ "numstat.txt").strip.splitLines.map!(line => line.split('\t')).array;

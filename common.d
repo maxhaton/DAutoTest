@@ -43,3 +43,8 @@ bool fileIgnored(string fn)
 }
 
 const eventFile = "pull-pending.txt";
+
+string failureHighlightsFile(string testDir) {
+	import std.path;
+	return buildPath(testDir, "failure-highlights.txt");
+}

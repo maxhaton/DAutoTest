@@ -115,6 +115,8 @@ void main()
 			auto logFileName = testDir ~ "/build.log";
 			auto logFile = File(logFileName, "ab");
 
+			auto failureHighlights = File(failureHighlightsFile(testDir), "ab");
+
 			.log("Redirecting log to %s".format(logFileName));
 
 			scope(exit) logOverride = null;
@@ -248,6 +250,7 @@ void main()
 					catch (Exception e)
 					{
 						logFile.writeln("Test failed: ", e.toString());
+						failureHighlights.writeln("Test failed: ", e.toString());
 						throw new Exception("Test failed");
 					}
 				}
